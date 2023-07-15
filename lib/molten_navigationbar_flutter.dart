@@ -90,8 +90,9 @@ class MoltenBottomNavigationBar extends StatelessWidget {
       final Color _barColor =
           (barColor?.withOpacity(1)) ?? Theme.of(context).colorScheme.surface;
 
-      final Color _domeCircleColor = (domeCircleColor?.withOpacity(1)) ??
-          Theme.of(context).colorScheme.primary;
+      // final Color _domeCircleColor = (domeCircleColor?.withOpacity(1)) ??
+      //     Theme.of(context).colorScheme.primary;
+      final Color _domeCircleColor = Colors.transparent;
 
       final double _tabWidth =
           (constraints.biggest.width - margin.horizontal) / tabs.length;
@@ -99,7 +100,7 @@ class MoltenBottomNavigationBar extends StatelessWidget {
       final double _domeWidth = min(domeWidth, _tabWidth);
 
       assert(domeCircleSize <= (barHeight + domeHeight),
-          'domeCircleSize must be less than or equal to (barHeight + domeHeight)');
+      'domeCircleSize must be less than or equal to (barHeight + domeHeight)');
       final selectedTab = tabs[selectedIndex];
       return Container(
         height: barHeight + domeHeight,
@@ -127,7 +128,7 @@ class MoltenBottomNavigationBar extends StatelessWidget {
               domeWidth: _domeWidth - _borderRaduis.topRight.x,
               domeHeight: domeHeight,
               domeColor:
-                  borderSize > 0 ? (borderColor ?? _barColor) : _barColor,
+              borderSize > 0 ? (borderColor ?? _barColor) : _barColor,
             ),
             // Actual dome
             _animatedPositionedDome(
@@ -162,10 +163,11 @@ class MoltenBottomNavigationBar extends StatelessWidget {
                 curve: curve,
                 duration: duration ?? Duration(milliseconds: 150),
                 top: isSelected ? 0 : domeHeight,
-                bottom: 0,
+                bottom: 6,
                 left: _tabWidth * index,
                 width: _normalizeDomeOnEdge(_tabWidth, index),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       child: _MoltenTabWrapper(
@@ -176,7 +178,7 @@ class MoltenBottomNavigationBar extends StatelessWidget {
                       ),
                     ),
                     // const SizedBox(height: 8),
-                    if (isSelected && title != null) title,
+                    if (title != null) title,
                   ],
                 ),
               );
@@ -232,12 +234,14 @@ class _MoltenTabWrapper extends StatelessWidget {
   final bool isSelected;
   final Function onTab;
   final double circleSize;
+
   _MoltenTabWrapper({
     required this.tab,
     required this.isSelected,
     required this.onTab,
     required this.circleSize,
   });
+
   @override
   Widget build(BuildContext context) {
     return IconTheme(
@@ -256,7 +260,7 @@ class _MoltenTabWrapper extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () => onTab(),
-            child: tab.icon,
+            child: Icon(tab.icon, size: isSelected ? 32 : 24),
           ),
         ),
       ),
@@ -266,7 +270,7 @@ class _MoltenTabWrapper extends StatelessWidget {
 
 class MoltenTab {
   /// Can be any [Widget].
-  final Widget icon;
+  final IconData icon;
 
   /// title when tab is selected
   final Widget? title;
@@ -296,6 +300,7 @@ class _MoltenDome extends StatelessWidget {
   final Color color;
   final double height;
   final double width;
+
   _MoltenDome({
     required this.color,
     required this.height,
@@ -317,6 +322,7 @@ class _MoltenDome extends StatelessWidget {
 
 class _DomePainter extends CustomPainter {
   final Color color;
+
   _DomePainter({
     required this.color,
   });

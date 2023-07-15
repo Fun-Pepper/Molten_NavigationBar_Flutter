@@ -46,17 +46,17 @@ class _MyAppState extends State<MyApp> {
           // ansert as many tabs as you like
           tabs: [
             MoltenTab(
-              icon: Icon(Icons.search),
+              icon: Icons.search,
 
               // selectedColor: Colors.yellow,
             ),
             MoltenTab(
-              icon: Icon(Icons.home),
+              icon: Icons.home,
               title: Text('home'),
               // selectedColor: Colors.yellow,
             ),
             MoltenTab(
-              icon: Icon(Icons.person),
+              icon: Icons.person,
               // selectedColor: Colors.yellow,
             ),
           ],
