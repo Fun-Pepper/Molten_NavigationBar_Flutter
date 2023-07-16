@@ -100,7 +100,7 @@ class MoltenBottomNavigationBar extends StatelessWidget {
       final double _domeWidth = min(domeWidth, _tabWidth);
 
       assert(domeCircleSize <= (barHeight + domeHeight),
-      'domeCircleSize must be less than or equal to (barHeight + domeHeight)');
+          'domeCircleSize must be less than or equal to (barHeight + domeHeight)');
       final selectedTab = tabs[selectedIndex];
       return Container(
         height: barHeight + domeHeight,
@@ -128,7 +128,7 @@ class MoltenBottomNavigationBar extends StatelessWidget {
               domeWidth: _domeWidth - _borderRaduis.topRight.x,
               domeHeight: domeHeight,
               domeColor:
-              borderSize > 0 ? (borderColor ?? _barColor) : _barColor,
+                  borderSize > 0 ? (borderColor ?? _barColor) : _barColor,
             ),
             // Actual dome
             _animatedPositionedDome(
@@ -178,7 +178,16 @@ class MoltenBottomNavigationBar extends StatelessWidget {
                       ),
                     ),
                     // const SizedBox(height: 8),
-                    if (title != null) title,
+                    if (title != null)
+                      Text(
+                        title,
+                        style: entry.value.textStyle ??
+                            Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: isSelected
+                                      ? entry.value.selectedColor
+                                      : entry.value.unselectedColor,
+                                ),
+                      ),
                   ],
                 ),
               );
@@ -273,7 +282,7 @@ class MoltenTab {
   final IconData icon;
 
   /// title when tab is selected
-  final Widget? title;
+  final String? title;
 
   /// The [icon] color when the tab is selected
   ///
@@ -285,6 +294,8 @@ class MoltenTab {
   /// Grey if not set
   final Color? unselectedColor;
 
+  final TextStyle? textStyle;
+
   /// This represents each tab in the navigation bar.
   ///
   /// [icon] must not be null
@@ -293,6 +304,7 @@ class MoltenTab {
     this.selectedColor,
     this.title,
     this.unselectedColor,
+    this.textStyle,
   });
 }
 
