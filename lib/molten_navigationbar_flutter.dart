@@ -166,29 +166,33 @@ class MoltenBottomNavigationBar extends StatelessWidget {
                 bottom: 6,
                 left: _tabWidth * index,
                 width: _normalizeDomeOnEdge(_tabWidth, index),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: _MoltenTabWrapper(
-                        tab: entry.value,
-                        onTab: () => onTabChange(index),
-                        isSelected: isSelected,
-                        circleSize: domeCircleSize,
+                child: GestureDetector(
+                  onTap: () => onTabChange(index),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: _MoltenTabWrapper(
+                          tab: entry.value,
+                          // onTab: () => onTabChange(index),
+                          isSelected: isSelected,
+                          circleSize: domeCircleSize,
+                        ),
                       ),
-                    ),
-                    // const SizedBox(height: 8),
-                    if (title != null)
-                      Text(
-                        title,
-                        style: entry.value.textStyle ??
-                            Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: isSelected
-                                      ? entry.value.selectedColor
-                                      : entry.value.unselectedColor,
-                                ),
-                      ),
-                  ],
+                      // const SizedBox(height: 8),
+                      if (title != null)
+                        Text(
+                          title,
+                          style: entry.value.textStyle ??
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontSize: 10,
+                                color: isSelected
+                                    ? entry.value.selectedColor
+                                    : entry.value.unselectedColor,
+                              ),
+                        ),
+                    ],
+                  ),
                 ),
               );
             }).toList(),
@@ -241,13 +245,13 @@ class MoltenBottomNavigationBar extends StatelessWidget {
 class _MoltenTabWrapper extends StatelessWidget {
   final MoltenTab tab;
   final bool isSelected;
-  final Function onTab;
+  // final Function onTab;
   final double circleSize;
 
   _MoltenTabWrapper({
     required this.tab,
     required this.isSelected,
-    required this.onTab,
+    // required this.onTab,
     required this.circleSize,
   });
 
@@ -267,10 +271,11 @@ class _MoltenTabWrapper extends StatelessWidget {
               side: BorderSide(width: 0, color: Colors.transparent)),
           clipBehavior: Clip.hardEdge,
           color: Colors.transparent,
-          child: InkWell(
-            onTap: () => onTab(),
-            child: Icon(tab.icon, size: isSelected ? 32 : 24),
-          ),
+          child: isSelected
+              ? tab.selectedWidget ??
+              Icon(tab.icon, size: isSelected ? 32 : 24)
+              : tab.unselectedWidget ??
+              Icon(tab.icon, size: isSelected ? 32 : 24),
         ),
       ),
     );
@@ -279,7 +284,7 @@ class _MoltenTabWrapper extends StatelessWidget {
 
 class MoltenTab {
   /// Can be any [Widget].
-  final IconData icon;
+  final IconData? icon;
 
   /// title when tab is selected
   final String? title;
@@ -296,15 +301,20 @@ class MoltenTab {
 
   final TextStyle? textStyle;
 
+  final Widget? selectedWidget;
+  final Widget? unselectedWidget;
+
   /// This represents each tab in the navigation bar.
   ///
   /// [icon] must not be null
   MoltenTab({
-    required this.icon,
+    this.icon,
     this.selectedColor,
     this.title,
     this.unselectedColor,
     this.textStyle,
+    this.selectedWidget,
+    this.unselectedWidget,
   });
 }
 
